@@ -9,7 +9,7 @@
     "start:docker": "npm run build && npm run start",
     "lint": "eslint ./src",
     "lint:fix": "eslint --fix ./src",
-    "save": "docker compose restart backend"
+    "dev": "ts-node-dev --poll --respawn --transpile-only src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -42,6 +42,7 @@
     "husky": "^7.0.0",
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
+    "ts-node-dev": "^1.1.8",
     "typescript": "^4.6.3"
   }
 }

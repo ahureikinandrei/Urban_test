@@ -1,12 +1,12 @@
-import express, { Express } from 'express';
+import express, { Express, Request, Response } from 'express';
 import { PORT } from './config/constants';
 
 const port = Number(PORT ?? 8000);
 const app: Express = express();
 app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.json({ hello: 'andrei' });
+app.get('/', (req: Request, res: Response) => {
+    res.json({ status: 'success!' });
 });
 
 const start = async () => {

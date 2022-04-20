@@ -1,0 +1,16 @@
+version: "3.7"
+
+services:
+  backend_dev:
+    build:
+      context: .
+      target: development
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    container_name: backend_dev
+    ports:
+      - 8000:8000
+    command: npm run dev
+    environment:
+      PORT: 8000
