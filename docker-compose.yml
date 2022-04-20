@@ -10,10 +10,12 @@ services:
 
   backend:
     build: .
+    container_name: backend
+    volumes:
+      - ./static:/usr/src/app/static
     ports:
       - 8000:8000
       - 9229:9229 #debugger port
-    container_name: backend
     environment:
       PORT: 8000
       REDIS_URL: redis://redis
