@@ -1,6 +1,13 @@
 version: "3.7"
 
 services:
+  redis:
+    image: "redis:alpine"
+    container_name: backend_cache
+    hostname: redis
+    ports:
+      - "6379:6379"
+
   backend:
     build: .
     ports:
@@ -9,3 +16,8 @@ services:
     container_name: backend
     environment:
       PORT: 8000
+      REDIS_URL: redis://redis
+    depends_on:
+        - redis
+
+

@@ -1,6 +1,13 @@
 version: "3.7"
 
 services:
+  redis:
+    image: "redis:alpine"
+    container_name: backend_cache_dev
+    hostname: redis
+    ports:
+      - "6379:6379"
+
   backend_dev:
     build:
       context: .
@@ -14,3 +21,4 @@ services:
     command: npm run dev
     environment:
       PORT: 8000
+      REDIS_URL: redis://redis
