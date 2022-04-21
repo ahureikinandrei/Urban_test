@@ -1,20 +1,19 @@
-import express, { Express, Request, Response } from 'express';
-import { createClient } from 'redis';
-import { PORT, REDIS_URL } from './config/constants';
+import express, { Express } from 'express';
+import { PORT } from './config/constants';
+import errorHandler from './common/middleware/ErrorHandling.middleware';
+import router from './common/routes';
+import cashService from './cash/cash.service';
 
 const port = Number(PORT ?? 8000);
 const app: Express = express();
 app.use(express.json());
-
-const redisClient = createClient({ url: REDIS_URL });
-
-app.get('/', async (req: Request, res: Response) => {
-    res.json({ status: 'success' });
-});
+app.use(errorHandler);
+app.use(router);
 
 const start = async () => {
     try {
-        await redisClient.connect();
+        const cashServiceStatus = await cashService.connect();
+        console.log(cashServiceStatus);
 
         app.listen(port, '0.0.0.0', () => {
             console.log(
