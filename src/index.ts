@@ -1,6 +1,6 @@
 import express, { Express } from 'express';
 import { PORT } from './config/constants';
-import errorHandler from './common/middleware/ErrorHandling.middleware';
+import errorHandler from './error/ErrorHandling.middleware';
 import router from './common/routes';
 import cashService from './cash/cash.service';
 

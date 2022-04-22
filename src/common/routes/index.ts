@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import applicationRouter from '../../aplication/application.router';
-import addressRouter from '../../districts/address.router';
+import addressRouter from '../../address/address.router';
 
 const router = Router();
 

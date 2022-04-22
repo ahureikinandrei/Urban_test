@@ -4,7 +4,7 @@ import ApiError from '../error/ApiError';
 class ApplicationController {
     async get(req: Request, res: Response, next: NextFunction) {
         try {
-            res.json('get');
+            res.json('Urban get');
         } catch (e) {
             next(ApiError.internal(e.message));
         }
@@ -12,7 +12,7 @@ class ApplicationController {
 
     async post(req: Request, res: Response, next: NextFunction) {
         try {
-            res.json('post');
+            res.json('Urban post');
         } catch (e) {
             next(ApiError.internal(e.message));
         }
@@ -20,7 +20,7 @@ class ApplicationController {
 
     async put(req: Request, res: Response, next: NextFunction) {
         try {
-            res.json('put');
+            res.json('Urban put');
         } catch (e) {
             next(ApiError.internal(e.message));
         }
@@ -28,7 +28,7 @@ class ApplicationController {
 
     async delete(req: Request, res: Response, next: NextFunction) {
         try {
-            res.json('delete');
+            res.json('Urban delete');
         } catch (e) {
             next(ApiError.internal(e.message));
         }
