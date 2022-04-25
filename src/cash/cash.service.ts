@@ -15,8 +15,7 @@ export class CashService {
     async connect() {
         try {
             const { redisClient } = this;
-            const status = await redisClient.connect();
-            console.log(status);
+            await redisClient.connect();
             return CASH_SERVICE_WORKING_STATUS;
         } catch (e) {
             return CASH_SERVICE_ERROR_MSG;

@@ -4,14 +4,18 @@ import errorHandler from './error/ErrorHandling.middleware';
 import router from './common/routes';
 import cashService from './cash/cash.service';
 
+import DistrictService from './district/district.service';
+
 const port = Number(PORT ?? 8000);
 const app: Express = express();
+
 app.use(express.json());
 app.use(errorHandler);
 app.use(router);
 
 const start = async () => {
     try {
+        await DistrictService.init();
         const cashServiceStatus = await cashService.connect();
         console.log(cashServiceStatus);
 

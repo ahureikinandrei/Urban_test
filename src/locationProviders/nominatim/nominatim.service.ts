@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { NOMINATIM_SERVICE_URL } from '../../config/constants';
 import { INominatimResponse, INominatimSearchParams } from './nominatim.types';
+import { Location } from '../../address/address.types';
 
 class NominateService {
     protected searchParams: INominatimSearchParams;
@@ -13,7 +14,9 @@ class NominateService {
         };
     }
 
-    async getCoordinatesByQueryString(searchString: string) {
+    async getLocationByQueryString(
+        searchString: string
+    ): Promise<Location | null> {
         try {
             const { searchParams } = this;
             const response = await axios.get<INominatimResponse[]>(
@@ -22,10 +25,28 @@ class NominateService {
                     params: { q: searchString, ...searchParams },
                 }
             );
-            return response.data;
+
+            const [firstResult] = response.data;
+            if (firstResult) {
+                return this.transformLocation(firstResult);
+            }
+
+            return null;
         } catch (e) {
-            return [];
+            return null;
         }
+    }
+
+    transformLocation(searchResponse: INominatimResponse): Location {
+        const { lat, lon, address } = searchResponse;
+        const { city, postcode } = address;
+
+        return {
+            city,
+            lat: Number(lat),
+            lng: Number(lon),
+            postcode,
+        };
     }
 }
 
