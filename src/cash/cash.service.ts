@@ -22,13 +22,23 @@ export class CashService {
         }
     }
 
-    async saveInCash(key: string, value: string, ttlDays = 10) {
+    async saveInCash(key: string, value: string | number, ttlDays = 10) {
         const { redisClient } = this;
         const ttl = CashService.ttlToDays(ttlDays);
         await redisClient.set(key, value, {
             EX: ttl,
             NX: true,
         });
+    }
+
+    async saveInCashJson(key: string, value: any, ttlDays = 10) {
+        await this.saveInCash(key, JSON.stringify(value), ttlDays);
+    }
+
+    async get(key: string) {
+        const { redisClient } = this;
+        const valueInCash = await redisClient.get(key);
+        return valueInCash;
     }
 
     async clearAll() {

@@ -5,6 +5,7 @@ import districtService from '../district/district.service';
 import { Location, Params, ReqBody, ReqQuery, ResBody } from './address.types';
 import { isString } from '../utils/types';
 import addressService from './address.service';
+import cashService from '../cash/cash.service';
 
 class AddressController {
     async get(
@@ -37,6 +38,7 @@ class AddressController {
                     servicesNames
                 );
 
+                await cashService.saveInCashJson(search, responseBody);
                 res.json(responseBody);
                 return;
             }
