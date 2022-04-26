@@ -70,7 +70,7 @@ class DistrictService {
                 );
 
             const calculationServiceArea =
-                this.estimationCoordinateInDistrictArea(
+                this.calculationCoordinateInDistrictArea(
                     validCoordinates,
                     coordinates
                 );
@@ -105,7 +105,7 @@ class DistrictService {
         return pathToFile;
     }
 
-    estimationCoordinateInDistrictArea(
+    calculationCoordinateInDistrictArea(
         polygon: VerticesCoordinates[],
         coordinates: Coordinates
     ) {

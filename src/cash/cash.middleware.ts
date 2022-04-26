@@ -16,18 +16,15 @@ const cashAddressMiddleware = async (
 ) => {
     try {
         const { address } = req.query;
-
-        if (!isString(address)) {
-            next();
-            return;
+        if (isString(address) && cashService.isOpen) {
+            const data = await cashService.get(address);
+            if (data !== null) {
+                const cashedResponse = JSON.parse(data);
+                res.json(cashedResponse);
+                return;
+            }
         }
 
-        const data = await cashService.get(address);
-        if (data !== null) {
-            const cashedResponse = JSON.parse(data);
-            res.json(cashedResponse);
-            return;
-        }
         next();
     } catch {
         next();

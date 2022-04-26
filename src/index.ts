@@ -5,13 +5,18 @@ import router from './common/routes';
 import cashService from './cash/cash.service';
 
 import DistrictService from './district/district.service';
+import geocodingService from './geocding/geocoding.service';
+import nominatimService from './locationProviders/nominatim/nominatim.service';
 
 const port = Number(PORT ?? 8000);
 const app: Express = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ parameterLimit: 10 }));
 app.use(errorHandler);
 app.use(router);
+
+geocodingService.addProviders(nominatimService);
 
 const start = async () => {
     try {

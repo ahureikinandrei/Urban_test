@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import ApiError from '../error/ApiError';
-import nominatimService from '../locationProviders/nominatim/nominatim.service';
 import districtService from '../district/district.service';
 import { Location, Params, ReqBody, ReqQuery, ResBody } from './address.types';
 import { isString } from '../utils/types';
 import addressService from './address.service';
 import cashService from '../cash/cash.service';
+import geocodingService from '../geocding/geocoding.service';
 
 class AddressController {
     async get(
@@ -20,8 +20,7 @@ class AddressController {
                 return;
             }
 
-            const searchResult =
-                await nominatimService.getLocationByQueryString(search);
+            const searchResult = await geocodingService.getLocation(search);
 
             if (searchResult) {
                 const coordinates =
@@ -47,30 +46,6 @@ class AddressController {
                 addressService.createNotFoundBodyResponseBody();
 
             res.json(notFoundBody);
-        } catch (e) {
-            next(ApiError.internal(e.message));
-        }
-    }
-
-    async post(req: Request, res: Response, next: NextFunction) {
-        try {
-            res.json('post');
-        } catch (e) {
-            next(ApiError.internal(e.message));
-        }
-    }
-
-    async put(req: Request, res: Response, next: NextFunction) {
-        try {
-            res.json('put');
-        } catch (e) {
-            next(ApiError.internal(e.message));
-        }
-    }
-
-    async delete(req: Request, res: Response, next: NextFunction) {
-        try {
-            res.json('delete');
         } catch (e) {
             next(ApiError.internal(e.message));
         }

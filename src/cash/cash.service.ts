@@ -12,10 +12,18 @@ export class CashService {
         this.redisClient = createClient({ url: REDIS_URL });
     }
 
+    get isOpen() {
+        const { redisClient } = this;
+        return redisClient.isOpen;
+    }
+
     async connect() {
         try {
             const { redisClient } = this;
             await redisClient.connect();
+            this.redisClient.on('error', () => {
+                this.redisClient.quit();
+            });
             return CASH_SERVICE_WORKING_STATUS;
         } catch (e) {
             return CASH_SERVICE_ERROR_MSG;
@@ -24,6 +32,9 @@ export class CashService {
 
     async saveInCash(key: string, value: string | number, ttlDays = 10) {
         const { redisClient } = this;
+        if (!redisClient.isOpen) {
+            return;
+        }
         const ttl = CashService.ttlToDays(ttlDays);
         await redisClient.set(key, value, {
             EX: ttl,
@@ -31,20 +42,21 @@ export class CashService {
         });
     }
 
-    async saveInCashJson(key: string, value: any, ttlDays = 10) {
+    async saveInCashJson<T>(key: string, value: T, ttlDays = 10) {
+        const { redisClient } = this;
+        if (!redisClient.isOpen) {
+            return;
+        }
         await this.saveInCash(key, JSON.stringify(value), ttlDays);
     }
 
     async get(key: string) {
         const { redisClient } = this;
+        if (!redisClient.isOpen) {
+            return CASH_SERVICE_ERROR_MSG;
+        }
         const valueInCash = await redisClient.get(key);
         return valueInCash;
-    }
-
-    async clearAll() {
-        const { redisClient } = this;
-        const status = await redisClient.flushAll();
-        return status;
     }
 
     static ttlToDays(ttlDays: number) {

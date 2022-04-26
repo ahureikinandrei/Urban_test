@@ -2,8 +2,11 @@ import axios from 'axios';
 import { NOMINATIM_SERVICE_URL } from '../../config/constants';
 import { INominatimResponse, INominatimSearchParams } from './nominatim.types';
 import { Location } from '../../address/address.types';
+import { AddressToCoordinateProvider } from '../locationProviders.types';
 
-class NominateService {
+class NominateService
+    implements AddressToCoordinateProvider<INominatimResponse>
+{
     protected searchParams: INominatimSearchParams;
 
     constructor() {

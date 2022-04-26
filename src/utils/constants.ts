@@ -7,3 +7,5 @@ export const DISTRICT_SERVICE_WORKING_STATUS = 'District service working';
 
 export const NOT_FOUND = 'NOT_FOUND';
 export const OK = 'OK';
+
+export const LOCATION_PROVIDERS_NOT_FOUND = 'No location providers available';
