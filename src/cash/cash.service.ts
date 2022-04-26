@@ -8,8 +8,17 @@ import {
 export class CashService {
     private redisClient: RedisClientType;
 
+    public isAvailable = false;
+
     constructor() {
-        this.redisClient = createClient({ url: REDIS_URL });
+        this.redisClient = createClient({
+            url: REDIS_URL,
+            socket: {
+                reconnectStrategy: () => {
+                    return new Error(CASH_SERVICE_ERROR_MSG);
+                },
+            },
+        });
     }
 
     get isOpen() {
@@ -21,8 +30,9 @@ export class CashService {
         try {
             const { redisClient } = this;
             await redisClient.connect();
+            this.isAvailable = true;
             this.redisClient.on('error', () => {
-                this.redisClient.quit();
+                this.isAvailable = false;
             });
             return CASH_SERVICE_WORKING_STATUS;
         } catch (e) {
