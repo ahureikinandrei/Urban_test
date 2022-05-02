@@ -2,6 +2,7 @@ import { access, readFile } from 'fs/promises';
 import { constants } from 'fs';
 import path from 'path';
 import { Worker } from 'worker_threads';
+
 import {
     Coordinates,
     IDistrictsData,
@@ -27,7 +28,7 @@ class DistrictService {
         this.pointsInPolygonWorkerPath = path.join(
             __dirname,
             'workers',
-            'pointInPolygon.worker.ts'
+            'pointInPolygon.worker'
         );
     }
 
@@ -110,7 +111,6 @@ class DistrictService {
         coordinates: Coordinates
     ) {
         const { pointsInPolygonWorkerPath } = this;
-
         return new Promise<boolean>((resolve, reject) => {
             const worker = new Worker(pointsInPolygonWorkerPath, {
                 workerData: {
@@ -120,10 +120,12 @@ class DistrictService {
             });
 
             worker.on('message', (msg: boolean) => {
+                console.log('gr');
                 resolve(msg);
             });
 
-            worker.on('error', () => {
+            worker.on('error', (err) => {
+                console.log(err);
                 reject(false);
                 // reject(err); TODO
             });

@@ -5,7 +5,7 @@ import { Location, Params, ReqBody, ReqQuery, ResBody } from './address.types';
 import { isString } from '../utils/types';
 import addressService from './address.service';
 import cashService from '../cash/cash.service';
-import geocodingService from '../geocding/geocoding.service';
+import geocodingService from '../geocoding/geocoding.service';
 
 class AddressController {
     async get(

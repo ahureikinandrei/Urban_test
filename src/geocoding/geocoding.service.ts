@@ -19,7 +19,7 @@ class GeocodingService {
     async getLocation(search: string): Promise<Location | null> {
         const { addressToCoordinateProviders } = this;
         if (addressToCoordinateProviders.length === 0) {
-            console.log(LOCATION_PROVIDERS_NOT_FOUND);
+            console.log(LOCATION_PROVIDERS_NOT_FOUND); // TODO
             return null;
         }
 
