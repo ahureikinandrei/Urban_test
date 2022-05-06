@@ -7,14 +7,12 @@ import {
     IDistrictsData,
     IFeatures,
     VerticesCoordinates,
-    VerticesCoordinatesInJsonDocument,
 } from './district.types';
 import {
     DISTRICT_SERVICE_ERROR_MSG,
     DISTRICT_SERVICE_WORKING_STATUS,
 } from '../utils/constants';
 import { DISTRICT_DATA_FILE_NAME } from '../config/constants';
-import { isArray } from '../utils/types';
 
 class DistrictService {
     districtsData: IDistrictsData | null = null;
@@ -65,10 +63,7 @@ class DistrictService {
         districts.forEach((district: IFeatures) => {
             const { geometry } = district;
 
-            const validCoordinates =
-                DistrictService.transformServiceAreaGeometry(
-                    geometry.coordinates
-                );
+            const [validCoordinates] = geometry.coordinates;
 
             const calculationServiceArea =
                 this.calculationCoordinateInDistrictArea(
@@ -132,19 +127,6 @@ class DistrictService {
                 reject(false);
             });
         });
-    }
-
-    static transformServiceAreaGeometry(
-        verticesCoordinates: VerticesCoordinatesInJsonDocument[]
-    ): VerticesCoordinates[] {
-        if (
-            verticesCoordinates.length === 1 &&
-            isArray(verticesCoordinates[0])
-        ) {
-            const [validCoordinates] = verticesCoordinates;
-            return validCoordinates;
-        }
-        return [];
     }
 }
 
