@@ -8,9 +8,8 @@ class GeocodingService {
 
     private providersLength = this.addressToCoordinateProviders.length;
 
-    addProviders(provider: any) {
+    addProviders(provider: AddressToCoordinateProvider<any>) {
         const { addressToCoordinateProviders } = this;
-
         addressToCoordinateProviders.push(provider);
 
         this.providersLength += 1;
@@ -28,24 +27,27 @@ class GeocodingService {
         return result;
     }
 
-    private async recursiveProvidersUse(
+    async recursiveProvidersUse(
         search: string,
-        currentProviderIndex: number
+        indexCurrentProvider: number
     ): Promise<Location | null> {
         const { providersLength } = this;
+
         const providerResult = await this.useProvider(
             search,
-            currentProviderIndex
+            indexCurrentProvider
         );
 
         if (providerResult !== null) {
             return providerResult;
         }
 
-        if (currentProviderIndex < providersLength) {
+        const IndexNextProvider = indexCurrentProvider + 1;
+
+        if (IndexNextProvider < providersLength) {
             const result = await this.recursiveProvidersUse(
                 search,
-                currentProviderIndex + 1
+                IndexNextProvider
             );
 
             return result;
@@ -54,12 +56,13 @@ class GeocodingService {
         return null;
     }
 
-    private async useProvider(
+    protected async useProvider(
         search: string,
         providerIndex: number
     ): Promise<Location | null> {
         const { addressToCoordinateProviders } = this;
         const provider = addressToCoordinateProviders[providerIndex];
+
         if (provider === undefined) {
             return null;
         }
