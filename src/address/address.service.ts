@@ -1,4 +1,4 @@
-import { NOT_FOUND, OK } from '../utils/constants';
+import { NON_EXISTING, NOT_FOUND, OK } from '../utils/constants';
 import { Location, SearchResultBody } from './address.types';
 
 export class AddressService {
@@ -20,7 +20,7 @@ export class AddressService {
     createNotFoundBodyResponseBody() {
         return {
             status: NOT_FOUND,
-            search: 'Non-existing address',
+            search: NON_EXISTING,
         };
     }
 }

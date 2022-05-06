@@ -2,7 +2,6 @@ import { access, readFile } from 'fs/promises';
 import { constants } from 'fs';
 import path from 'path';
 import { Worker } from 'worker_threads';
-
 import {
     Coordinates,
     IDistrictsData,
@@ -36,6 +35,7 @@ class DistrictService {
         try {
             const pathToFile = await this.getPathToDistrictsInfo();
             const dataDistrictFile = await readFile(pathToFile, 'utf8');
+
             const districtsData: IDistrictsData = JSON.parse(dataDistrictFile);
 
             this.districtsData = districtsData;
@@ -120,12 +120,10 @@ class DistrictService {
             });
 
             worker.on('message', (msg: boolean) => {
-                console.log('gr');
                 resolve(msg);
             });
 
-            worker.on('error', (err) => {
-                console.log(err);
+            worker.on('error', () => {
                 reject(false);
                 // reject(err); TODO
             });

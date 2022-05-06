@@ -14,5 +14,5 @@ export type Params = {};
 export type ResBody = CashedResultBody;
 export type ReqBody = {};
 export type ReqQuery = {
-    address: string;
+    address?: string;
 };

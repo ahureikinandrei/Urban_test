@@ -17,7 +17,8 @@ const cashAddressMiddleware = async (
     try {
         const { address } = req.query;
         if (isString(address) && cashService.isAvailable) {
-            const data = await cashService.get(address);
+            const data = await cashService.get(address!);
+
             if (data !== null) {
                 const cashedResponse = JSON.parse(data);
                 res.json(cashedResponse);

@@ -5,15 +5,13 @@ const config: InitialOptionsTsJest = {
     preset: 'ts-jest',
     testEnvironment: 'node',
     testMatch: ['**/**/*.test.ts'],
-    transform: {
-        '^.+\\.ts?$': 'ts-jest',
-    },
-    transformIgnorePatterns: ['<rootDir>/node_modules/'],
     collectCoverage: true,
     coverageDirectory: './test/coverage',
+    coveragePathIgnorePatterns: ['/dist/', '/node_modules/'],
     forceExit: true,
     clearMocks: true,
-    modulePaths: ['node_modules', '<rootDir>/src'],
+    resetMocks: true,
+    restoreMocks: true,
 };
 
 export default config;

@@ -1,3 +1,5 @@
+import { HttpStatusCode } from '../utils/constants';
+
 class ApiError extends Error {
     public status: number;
 
@@ -8,19 +10,19 @@ class ApiError extends Error {
     }
 
     static badRequest(message: string) {
-        return new ApiError(400, message);
+        return new ApiError(HttpStatusCode.BAD_REQUEST, message);
     }
 
     static internal(message: string) {
-        return new ApiError(500, message);
+        return new ApiError(HttpStatusCode.INTERNAL_SERVER, message);
     }
 
     static forbidden(message: string) {
-        return new ApiError(403, message);
+        return new ApiError(HttpStatusCode.FORBIDDEN, message);
     }
 
     static notFound(message: string) {
-        return new ApiError(404, message);
+        return new ApiError(HttpStatusCode.NOT_FOUND, message);
     }
 }
 

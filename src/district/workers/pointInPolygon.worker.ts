@@ -24,5 +24,3 @@ if (parentPort) {
     const { polygon, coordinates } = workerData as WorkerPointInPolygonData;
     parentPort.postMessage(pointInPolygon(polygon, coordinates));
 }
-
-export default pointInPolygon;
