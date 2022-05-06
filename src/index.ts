@@ -3,7 +3,7 @@ import { PORT } from './config/constants';
 import app from './app';
 import cashService from './cash/cash.service';
 import DistrictService from './district/district.service';
-import geocodingService from './geocding/geocoding.service';
+import geocodingService from './geocoding/geocoding.service';
 import nominatimService from './locationProviders/nominatim/nominatim.service';
 
 const port = Number(PORT ?? 8000);

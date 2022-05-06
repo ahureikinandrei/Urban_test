@@ -1,6 +1,7 @@
 import { createClient, RedisClientType } from 'redis';
 import { REDIS_URL } from '../config/constants';
 import {
+    CASH_SERVICE_ERROR,
     CASH_SERVICE_ERROR_MSG,
     CASH_SERVICE_WORKING_STATUS,
 } from '../utils/constants';
@@ -11,7 +12,11 @@ export class CashService {
     public isAvailable = false;
 
     constructor() {
-        this.redisClient = createClient({
+        this.redisClient = this.createClient();
+    }
+
+    createClient(): RedisClientType {
+        return createClient({
             url: REDIS_URL,
             socket: {
                 reconnectStrategy: () => {
@@ -21,19 +26,16 @@ export class CashService {
         });
     }
 
-    get isOpen() {
-        const { redisClient } = this;
-        return redisClient.isOpen;
-    }
-
     async connect() {
         try {
             const { redisClient } = this;
             await redisClient.connect();
             this.isAvailable = true;
+
             this.redisClient.on('error', () => {
                 this.isAvailable = false;
             });
+
             return CASH_SERVICE_WORKING_STATUS;
         } catch (e) {
             return CASH_SERVICE_ERROR_MSG;
@@ -41,15 +43,19 @@ export class CashService {
     }
 
     async saveInCash(key: string, value: string | number, ttlDays = 10) {
-        const { redisClient } = this;
-        if (!redisClient.isOpen) {
-            return;
+        try {
+            const { redisClient } = this;
+            if (!redisClient.isOpen) {
+                return;
+            }
+            const ttl = CashService.ttlToDays(ttlDays);
+            await redisClient.set(key, value, {
+                EX: ttl,
+                NX: true,
+            });
+        } catch {
+            console.log(CASH_SERVICE_ERROR);
         }
-        const ttl = CashService.ttlToDays(ttlDays);
-        await redisClient.set(key, value, {
-            EX: ttl,
-            NX: true,
-        });
     }
 
     async saveInCashJson<T>(key: string, value: T, ttlDays = 10) {
